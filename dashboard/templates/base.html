@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sıcak Fırsatlar Takip Kontrol Paneli{% endblock %}</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Main Style sheet -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-fire-flame-curved logo-icon"></i>
+                <span class="logo-text">Fırsat<span>Takip</span></span>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="/" class="menu-item active">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Fırsatlar Kontrol Paneli</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <span class="status-indicator-container">
+                    <span class="status-dot online"></span>
+                    <span class="status-text">Sistem Aktif</span>
+                </span>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Main JavaScript file -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="header-title">
+        <h1>Fırsatlar Kontrol Paneli</h1>
+        <p>Forum indirimlerinin yapay zeka ile otomatik taranması, ayıklanması ve doğrulanması.</p>
+    </div>
+    
+    <div class="header-actions">
+        <button id="btn-scan" class="btn-primary" {% if scan_running %}disabled{% endif %}>
+            {% if scan_running %}
+                <i class="fa-solid fa-circle-notch spinner"></i>
+                <span id="scan-btn-text">Taranıyor...</span>
+            {% else %}
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span id="scan-btn-text">Şimdi Tara</span>
+            {% endif %}
+        </button>
+    </div>
+</div>
+
+<!-- Configuration Warnings if Any -->
+{% if warnings %}
+    {% for warning in warnings %}
+        <div class="warning-alert">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>{{ warning }}</span>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="dashboard-grid">
+    <!-- Left Column: Verified Deals -->
+    <section class="glass-card">
+        <div class="card-header">
+            <h2><i class="fa-solid fa-tags"></i> Doğrulanmış Gerçek İndirimler</h2>
+            <span class="badge-count">{{ deals|length }} Fırsat</span>
+        </div>
+        
+        <div class="deals-list">
+            {% if not deals %}
+                <div class="no-deals">
+                    <i class="fa-solid fa-box-open" style="font-size: 2.5rem; margin-bottom: 1rem; display: block; color: var(--text-muted);"></i>
+                    Henüz doğrulanmış bir fırsat bulunamadı. Taramayı başlatarak yeni indirimleri kontrol edebilirsiniz.
+                </div>
+            {% else %}
+                {% for deal in deals %}
+                    <article class="deal-card">
+                        <div class="deal-top">
+                            <a href="{{ deal.thread_url }}" target="_blank" class="deal-title">
+                                {{ deal.product_name }}
+                            </a>
+                            {% if deal.market_price and deal.discount_percentage > 0 %}
+                                <span class="badge-discount">%{{ deal.discount_percentage|round|int }} İndirim</span>
+                            {% else %}
+                                <span class="badge-local">Yerel Filtre</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="deal-meta">
+                            <span class="deal-meta-item">
+                                <i class="fa-solid fa-folder"></i>
+                                <span>{{ deal.category }}</span>
+                            </span>
+                            <span class="deal-meta-item">
+                                <i class="fa-solid fa-clock"></i>
+                                <span class="deal-date">{{ deal.created_at[:16]|replace("T", " ") }}</span>
+                            </span>
+                            <span class="deal-meta-item">
+                                <i class="fa-solid fa-comments"></i>
+                                <span>{{ deal.thread_source|capitalize }}</span>
+                            </span>
+                        </div>
+                        
+                        <div class="deal-pricing-container">
+                            <div class="price-details">
+                                <div class="price-block">
+                                    <span class="price-label">Fırsat Fiyatı</span>
+                                    <span class="forum-price">
+                                        {% if deal.forum_price and deal.forum_price > 0 %}
+                                            {{ "{:,.2f}".format(deal.forum_price) }} TL
+                                        {% else %}
+                                            Belirtilmemiş
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                {% if deal.market_price %}
+                                <div class="price-block">
+                                    <span class="price-label">Piyasa Fiyatı</span>
+                                    <span class="market-price">{{ "{:,.2f}".format(deal.market_price) }} TL</span>
+                                    <span class="market-source">{{ deal.source_store }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="google-summary">
+                                <strong>Detay/Piyasa Özeti:</strong> {{ deal.google_search_summary }}
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Right Column: Keywords & Settings -->
+    <div class="keywords-panel">
+        <section class="glass-card">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-list-check"></i> Takip Edilen Kelimeler</h2>
+            </div>
+            
+            <form action="/keywords/add" method="POST" class="keyword-form">
+                <input type="text" name="keyword" placeholder="örn: macbook, bebek bezi..." required class="keyword-input">
+                <button type="submit" class="btn-add-kw">Ekle</button>
+            </form>
+            
+            <div class="keywords-list">
+                {% for kw in keywords %}
+                    <div class="keyword-item">
+                        <div class="keyword-info">
+                            <!-- Toggle switch form -->
+                            <form action="/keywords/{{ kw.id }}/toggle" method="POST" style="display: flex; align-items: center;">
+                                <input type="hidden" name="active" value="{% if kw.is_active %}0{% else %}1{% endif %}">
+                                <label class="switch">
+                                    <input type="checkbox" {% if kw.is_active %}checked{% endif %} onchange="this.form.submit()">
+                                    <span class="slider"></span>
+                                </label>
+                            </form>
+                            <span class="keyword-text {% if not kw.is_active %}inactive{% endif %}">
+                                {{ kw.keyword }}
+                            </span>
+                        </div>
+                        
+                        <!-- Delete form -->
+                        <form action="/keywords/{{ kw.id }}/delete" method="POST" style="display: inline;">
+                            <button type="submit" class="btn-delete-kw" title="Kelimeyi sil">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- System Information -->
+        <section class="glass-card info-section">
+            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-circle-info" style="color: var(--accent);"></i>
+                Sistem Nasıl Çalışır?
+            </h3>
+            <p>1. <strong>Kazıma:</strong> Belirlenen aralıklarla Donanım Arşivi forumundaki en son indirim başlıkları taranır.</p>
+            <p>2. <strong>AI Çözümleme:</strong> Gemini API, konunun başlığını ve içeriğini analiz ederek ürünün temiz ismini, fiyatını ve kategorisini çıkarır.</p>
+            <p>3. <strong>Filtreleme:</strong> Çıkarılan ürün ismi, takip ettiğiniz kelimelerle anlamsal veya kelime bazlı eşleşiyorsa sürece devam edilir.</p>
+            <p>4. <strong>Doğrulama:</strong> Gemini Google Search Grounding ile ürünün Türkiye e-ticaret sitelerindeki en ucuz fiyatı sorgulanır. Forum fiyatı piyasadan en az <strong>%10</strong> daha ucuzsa indirim onaylanır.</p>
+            <p>5. <strong>Bildirim:</strong> Doğrulanan gerçek indirimler Telegram kanalına bot aracılığıyla anlık iletilir.</p>
+        </section>
+    </div>
+</div>
+{% endblock %}
