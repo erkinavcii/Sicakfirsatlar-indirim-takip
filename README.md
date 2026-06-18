@@ -59,7 +59,7 @@ graph TD
 
 ### 1. Depoyu Klonlayın ve Bağımlılıkları Yükleyin
 ```bash
-git clone <depo-url>
+git clone https://github.com/erkinavcii/Sicakfirsatlar-indirim-takip.git
 cd SıcakFırsatlarTakip
 
 # Bağımlılıkları yükleyin
