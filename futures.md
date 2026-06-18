@@ -7,20 +7,20 @@ Bu dosya, **Akıllı İndirim Takip ve Doğrulama Sistemi**'nin gelecek gelişti
 ## 📅 Geliştirme Fazları (Phases & Priorities)
 
 ### Faz 1 — Scraper Güvenilirliği & Dayanıklılık 
-*   **Öncelik**: Çok Yüksek | **Durum**: Planlanıyor ⏳
+*   **Öncelik**: Çok Yüksek | **Durum**: Tamamlandı ✅
 *   **Hedef**: Forum HTML yapısındaki değişikliklere karşı dayanıklılık kazanmak ve bot tespiti engellerini aşmak.
 *   **Görevler**:
-    *   [ ] **Rate Limiting & Random Delay**: İstekler arasına asenkron rastgele gecikmeler (`asyncio.sleep(random.uniform(0.5, 2.0))`) eklenerek insan benzeri tarama profili oluşturulması.
-    *   [ ] **Rotating User-Agent Pool**: [base.py](scrapers/base.py) dosyasında 10-15 adet güncel tarayıcı User-Agent'ından oluşan bir havuz tanımlanıp her istekte rastgele seçilmesi.
-    *   [ ] **Çoklu Sayfa Desteği (Pagination)**: Sadece ilk sayfayı değil, son 24 saat içinde açılan tüm konuları yakalamak için geriye doğru sayfalama desteği.
+    *   [x] **Rate Limiting & Random Delay**: İstekler arasına asenkron rastgele gecikmeler (`asyncio.sleep(random.uniform(0.5, 2.0))`) eklenerek insan benzeri tarama profili oluşturulması.
+    *   [x] **Rotating User-Agent Pool**: [base.py](scrapers/base.py) dosyasında 10-15 adet güncel tarayıcı User-Agent'ından oluşan bir havuz tanımlanıp her istekte rastgele seçilmesi.
+    *   [x] **Çoklu Sayfa Desteği (Pagination)**: Sadece ilk sayfayı değil, son 24 saat içinde açılan tüm konuları yakalamak için geriye doğru sayfalama desteği.
     *   [ ] **İleti Bazlı Tekilleştirme**: Aynı indirim konusunu veya iletisini tekrar işlememek için `thread_id` ve `post_id` veritabanı kontrollerinin doğrulanması.
 
 ### Faz 2 — NLP & Yerel Filtreleme Kalitesi
-*   **Öncelik**: Yüksek | **Durum**: Kısmen Tamamlandı (Temel NLP Aktif) ✅
+*   **Öncelik**: Yüksek | **Durum**: Kısmen Tamamlandı (Temel NLP + Fuzzy Eşleşme Aktif) ✅
 *   **Hedef**: Yerel filtreleme kalitesini artırarak hatalı eşleşmeleri sıfıra indirmek.
 *   **Görevler**:
     *   [ ] **Keyword Yönetimi**: Takip kelimelerinin doğrudan [config.py](config.py) içerisindeki `TRACKED_KEYWORDS` listesinden de yüklenebilir/yönetilebilir hale getirilmesi.
-    *   [ ] **Fuzzy Matching (Bulanık Eşleşme)**: "samsung" yerine "samsun" veya "sansung" gibi yazım hatalarını yakalamak için `rapidfuzz` kütüphanesi entegrasyonu (Levenshtein benzerlik skoru > %85).
+    *   [x] **Fuzzy Matching (Bulanık Eşleşme)**: "samsung" yerine "samsun" veya "sansung" gibi yazım hatalarını yakalamak için `rapidfuzz` kütüphanesi entegrasyonu (Levenshtein benzerlik skoru > %85).
     *   [ ] **Minimum İndirim Eşiği**: Yapay zeka modunda minimum indirim oranını filtreleyen parametre (örn: `MIN_DISCOUNT_PERCENTAGE = 10`).
     *   [ ] **Karaliste (Blacklist) Desteği**: "satılık", "aranıyor", "referans", "ikinci el" gibi indirim olmayan veya spam ilanların yerelde doğrudan elenmesi.
 

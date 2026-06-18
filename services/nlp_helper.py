@@ -1,5 +1,6 @@
 import re
 from typing import List
+from rapidfuzz import fuzz
 
 def turkish_lowercase(text: str) -> str:
     """Converts a string to lowercase handling Turkish character mapping (I->ı, İ->i) properly."""
@@ -66,6 +67,7 @@ def local_keyword_match(title: str, keywords: List[str]) -> bool:
     1. Exact clean match (e.g. 'monitör' == 'monitör')
     2. Turkish suffix stemming (e.g. title word 'monitörü' -> stem 'monitör' == keyword 'monitör')
     3. Compound word/brand substring checking (e.g. keyword 'macbook' in title word 'macbookpro')
+    4. Fuzzy string matching (e.g. Levenshtein similarity score >= 85 for typo tolerance)
     """
     title_clean = turkish_lowercase(title)
     
@@ -88,11 +90,20 @@ def local_keyword_match(title: str, keywords: List[str]) -> bool:
         for kw_clean, kw_stem in keyword_pairs:
             if not kw_clean:
                 continue
-            # Match conditions
+                
+            # 1. Exact, Stem, and Substring matches
             if (t_word == kw_clean or 
                 t_stem == kw_stem or 
                 kw_clean in t_word or 
                 kw_stem in t_stem):
                 return True
                 
+            # 2. Fuzzy Matching fallback (with Levenshtein ratio >= 85)
+            # Checked on both clean words and stems. Minimum word length of 4 to prevent false short word matches (e.g. rtx matching rta)
+            if len(kw_clean) >= 4 and len(t_word) >= 4:
+                word_similarity = fuzz.ratio(kw_clean, t_word)
+                stem_similarity = fuzz.ratio(kw_stem, t_stem)
+                if word_similarity >= 85 or stem_similarity >= 85:
+                    return True
+                    
     return False
