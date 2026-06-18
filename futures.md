@@ -49,6 +49,22 @@ Bu dosya, **Akıllı İndirim Takip ve Doğrulama Sistemi**'nin gelecek gelişti
     *   [ ] **Technopat Sosyal İndirim Köşesi**: `TechnopatScraper` yazılması.
     *   [ ] **Ekşi Sözlük / Fırsat Başlıkları**: Popüler indirim başlıklarının taranması.
 
+### Faz 6 — GitHub Actions Bulut Entegrasyonu & Veri Kalıcılığı
+*   **Öncelik**: Yüksek | **Durum**: Tamamlandı ✅
+*   **Hedef**: Sunucu/VPS maliyeti olmadan sistemi 7/24 bulut üzerinde ücretsiz çalıştırmak.
+*   **Görevler**:
+    *   [x] **Tekli Çalışma Scripti (run_once.py)**: Web sunucusu ayağa kaldırmadan tek adımda tarama ve Telegram bildirim işlemini gerçekleştirip sonlanan script.
+    *   [x] **Dinamik Önbellekleme (Dynamic Cache Rolling)**: GitHub Actions her çalıştığında SQLite veri dosyasını (`database.db`) kaybetmemek için dinamik önbellek yönetimi.
+    *   [x] **Manuel ve Zamanlanmış Tetikleyiciler**: Her 30 dakikada bir otomatik çalışan cron ve GitHub Actions panelinden anlık tetiklenebilen manuel buton desteği.
+    *   [x] **Kurulum Dokümantasyonu**: Adım adım kurulum yönergelerinin [docs/github-actions-setup.md](docs/github-actions-setup.md) olarak yazılması.
+
+### Faz 7 — Veritabanı Ölçekleme (Hosted Database)
+*   **Öncelik**: Düşük | **Durum**: Planlanıyor (Gelecek Yol Haritası) ⏳
+*   **Hedef**: SQLite dosya önbellekleme yerine, buluttaki bir PostgreSQL (Supabase / Neon / CockroachDB) veritabanına doğrudan bağlanma seçeneği eklemek.
+*   **Görevler**:
+    *   [ ] **SQLAlchemy / SQLModel Geçişi**: Farklı SQL lehçeleriyle (SQLite ve PostgreSQL) uyumlu çalışacak ORM katmanı.
+    *   [ ] **Bulut DB Yapılandırması**: `.env` dosyasına `DATABASE_URL` parametresi eklenerek canlı veritabanı desteği sağlanması.
+
 ---
 
 ## 📝 Temiz Proje Promptu (GitHub ve Geliştiriciler İçin)

@@ -83,6 +83,9 @@ Uygulama başladığında:
 * Kontrol panelini `http://127.0.0.1:8000` adresinde ayağa kaldıracaktır.
 * Arka planda 10 dakikada bir otomatik tarama yapacak zamanlayıcıyı (scheduler) başlatacaktır.
 
+### 4. GitHub Actions ile 7/24 Bulutta Çalıştırma (Sunucusuz)
+Bu projeyi bilgisayarınız kapalıyken bile 7/24 ücretsiz olarak çalıştırmak için GitHub Actions entegrasyonu eklenmiştir. Kurulum, otomatik SQLite veri kalıcılığı (caching) ve Telegram secrets yapılandırma detayları için [docs/github-actions-setup.md](docs/github-actions-setup.md) kılavuzunu inceleyebilirsiniz.
+
 ---
 
 ## 📁 Proje Dosya Yapısı

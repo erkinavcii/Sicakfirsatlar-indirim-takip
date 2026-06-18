@@ -71,3 +71,10 @@ graph TD
 
 ### 📝 Adım 5: Prestijli README.md Dokümantasyonu
 * GitHub vitrini için görseller, badges, özellik karşılaştırma tablosu ve hızlı başlangıç rehberi ekleme.
+
+### 🚀 Adım 6: GitHub Actions ve Bulut Otomasyonu Entegrasyonu
+* Sistem için tek seferlik çalışıp kapanan `run_once.py` betiğinin hazırlanması.
+* Otomatik zamanlanmış ve manuel tetiklenebilir `.github/workflows/` dosyalarının oluşturulması.
+* SQLite `database.db` veri kalıcılığı için **Dynamic Cache Rolling** (Dinamik Önbellek) mekanizmasının kurulması.
+* Kurulum ve yapılandırma secrets detaylarının yer aldığı `docs/github-actions-setup.md` dokümanının yazılması.
+
