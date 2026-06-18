@@ -2,8 +2,8 @@ name: Scheduled Scraper
 
 on:
   schedule:
-    # Run every 30 minutes
-    - cron: '*/30 * * * *'
+    # Run once a day at 09:00 UTC (12:00 Turkish time) to save GitHub Action minutes
+    - cron: '0 9 * * *'
   # Enable manual execution from the scheduled workflow page too
   workflow_dispatch:
 
@@ -48,13 +48,16 @@ jobs:
 
       - name: Save SQLite Database Cache
         uses: actions/cache/save@v4
+        if: always()
         with:
           path: database.db
           key: database-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Upload Database Backup Artifact
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: database-backup
+          name: database-backup-${{ github.run_id }}
           path: database.db
           retention-days: 14
+

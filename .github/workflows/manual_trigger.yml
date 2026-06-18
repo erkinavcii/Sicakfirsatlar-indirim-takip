@@ -42,13 +42,15 @@ jobs:
 
       - name: Save SQLite Database Cache
         uses: actions/cache/save@v4
+        if: always()
         with:
           path: database.db
           key: database-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Upload Database Backup Artifact
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: database-backup
+          name: database-backup-${{ github.run_id }}
           path: database.db
           retention-days: 14
